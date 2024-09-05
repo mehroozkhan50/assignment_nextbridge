@@ -8,8 +8,11 @@
 import Foundation
 import Combine
 
+import Foundation
+import Combine
+
 class ListingsViewModel: ObservableObject {
-    @Published var listings: [Listing] = []
+    @Published var listings: [Results] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -19,7 +22,7 @@ class ListingsViewModel: ObservableObject {
             do {
                 let data = try await ListingsService.shared.fetchListings()
                 DispatchQueue.main.async {
-                    self.listings = data
+                    self.listings = data.results
                     self.isLoading = false
                 }
             } catch {

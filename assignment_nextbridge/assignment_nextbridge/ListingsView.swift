@@ -37,25 +37,28 @@ struct ListingsView: View {
 }
 
 struct ListingRow: View {
-    let listing: Listing
+    let listing: Results
     
     var body: some View {
         HStack {
-            AsyncImage(url: URL(string: listing.image)) { image in
-                image.resizable().aspectRatio(contentMode: .fill)
-            } placeholder: {
-                ProgressView()
+            if let thumbnailUrl = listing.imageUrlsThumbnails?.first, let url = URL(string: thumbnailUrl) {
+                AsyncImage(url: url) { image in
+                    image.resizable().aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 80, height: 80)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
-            .frame(width: 80, height: 80)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
             
             VStack(alignment: .leading) {
-                Text(listing.title).font(.headline)
-                Text(listing.price).font(.subheadline).foregroundColor(.gray)
+                Text(listing.name ?? "No name available").font(.headline)
+                Text(listing.price ?? "No price available").font(.subheadline).foregroundColor(.gray)
             }
         }
     }
 }
+
 
 #Preview {
     ListingsView()

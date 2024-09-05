@@ -9,34 +9,39 @@
 import SwiftUI
 
 struct ListingDetailView: View {
-    let listing: Listing
+    let listing: Results
     
     var body: some View {
-        VStack {
-            AsyncImage(url: URL(string: listing.image)) { image in
-                image.resizable().aspectRatio(contentMode: .fit)
-            } placeholder: {
-                ProgressView()
+       // ScrollView {
+            VStack {
+                
+                if let imageUrl = listing.imageUrls?.first, let url = URL(string: imageUrl) {
+                    AsyncImage(url: url) { image in
+                        image.resizable().aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(height: 300)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                
+                Text(listing.name ?? "No name available")
+                    .font(.title)
+                    .padding(.top)
+                
+                Text(listing.price ?? "No price available")
+                    .font(.headline)
+                    .foregroundColor(.green)
+                    .padding(.top, 5)
+                
+                Text("Created At: \(listing.createdAt ?? "Unknown")")
+                    .font(.footnote)
+                    .padding(.top, 5)
+                
+                Spacer()
             }
-            .frame(height: 300)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            
-            Text(listing.title)
-                .font(.title)
-                .padding(.top)
-            
-            Text(listing.price)
-                .font(.headline)
-                .foregroundColor(.green)
-                .padding(.top, 5)
-            
-            Text(listing.description)
-                .font(.body)
-                .padding(.top, 10)
-            
-            Spacer()
-        }
-        .padding()
-        .navigationTitle("Listing Details")
+            .padding()
+            .navigationTitle(listing.name ?? "Listing Details")
+        //}
     }
 }
